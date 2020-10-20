@@ -1,3 +1,5 @@
+set.seed(1337)
+
 # Grab the required packages. Install first if needed.
 list_of_packages <- c("ggplot2", "conflicted")
 
