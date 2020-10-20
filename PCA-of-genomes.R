@@ -4,7 +4,7 @@ for (i in listOfPackages){
   if(! i %in% installed.packages()){
     install.packages(i, dependencies = TRUE)
   }
-  require(i)
+  library(i)
 }
 
 # Create made-up data.
@@ -60,4 +60,11 @@ pca.data <- data.frame(Sample=rownames(pca$x),
                        Y=pca$x[,2])
 pca.data
 
+# Plot PCs 1 and 2 using ggplot this time. Note variations on axes.
+ggplot(data=pca.data, aes(x=X, y=Y, label=Sample)) +
+  geom_text() +
+  xlab(paste("PC1 - ", pca.var.per[1], "%", sep="")) +
+  ylab(paste("PC2 - ", pca.var.per[2], "%", sep="")) +
+  theme_bw() +
+  ggtitle("My PCA")
 
