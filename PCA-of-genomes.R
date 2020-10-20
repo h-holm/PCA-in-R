@@ -30,5 +30,12 @@ for (i in 1:100) {
   data.matrix[i,] <- c(wt.values, ko.values)
 }
 
-head(data.matrix)
+# Samples are columns, genes are rows. Transpose to make data compatible with prcomp().
+# head(data.matrix)
 dim(data.matrix)
+data.matrix <- t(data.matrix)
+# head(data.matrix)
+dim(data.matrix)
+
+# Now we can test run PCA on our data.
+pca <- prcomp(t(data.matrix), scale=TRUE)
