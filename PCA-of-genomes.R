@@ -65,6 +65,19 @@ ggplot(data=pca.data, aes(x=X, y=Y, label=Sample)) +
   geom_text() +
   xlab(paste("PC1 - ", pca.var.per[1], "%", sep="")) +
   ylab(paste("PC2 - ", pca.var.per[2], "%", sep="")) +
-  theme_bw() +
+  theme_bw() + # Make background white.
   ggtitle("My PCA")
 
+# Check loading scores to determine which genes have the largest effect on where samples are plotted.
+# Focus on PC1 since it has the by far highest variation.
+loading_scores <- pca$rotation[,1]
+
+# Genes pushing samples to the left have large negative values and vice versa.
+gene_scores <- abs(loading_scores)
+
+gene_score_ranked <- sort(gene_scores, decreasing=TRUE)
+top_10_genes <- names(gene_score_ranked[1:10])
+top_10_genes
+
+# If we want to see the signs:
+pca$rotation[top_10_genes,1]
