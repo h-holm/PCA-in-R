@@ -27,12 +27,9 @@ for (i in 1:100) {
   # instead of the negative Binomial Distribution for simplicity.
   wt.values <- rpois(5, lambda = sample(x = 10:1000, size = 1))
   ko.values <- rpois(5, lambda = sample(x = 10:1000, size = 1))
-  
+
   data_matrix[i, ] <- c(wt.values, ko.values)
 }
-
-# Samples are columns, genes are rows. Transpose to make data compatible with prcomp().
-# data_matrix <- t(data_matrix)
 
 # Compare PCA results with results from using eigen()
 # eigen() returns vectors - eigenvectors (vectors with loading scores in this case)
@@ -44,9 +41,25 @@ dim(cov_matrix)
 # We saw that the covariance matrix is symmetric. Hence, we can tell eigen()
 # to work only on the lower triangle by specifying symmetric = TRUE.
 # eigen_res <- eigen(cov_matrix, symmetric = TRUE)
-eigen.pcs <- t(t(eigen_res$vectors) %*% t(scale(t(data_matrix), center=TRUE)))
+eigen_PCs <- t(t(eigen_res$vectors) %*% t(scale(t(data_matrix), center = TRUE)))
 dim(eigen_res$vectors)
 head(eigen_res$vectors[, 1:2])
 
-eigen_PCs <- eigen_res$vectors %*% scale(data_matrix, center=TRUE)
+eigen_PCs <- t(t(eigen_res$vectors) %*% t(scale(t(data_matrix), center=TRUE)))
 eigen_PCs[, 1:2]
+
+eigen_df <- data.frame(
+  Sample = rownames(eigen_PCs),
+  X = (-1 * eigen_PCs[, 1]), # eigen() flips the X-axis in this case, so we flip it back
+  Y = eigen_PCs[, 2]
+) # X axis will be PC1, Y axis will be PC2
+eigen_df
+
+eigen_var_prc <- round(eigen_res$values / sum(eigen_res$values) * 100, 1)
+
+ggplot2::ggplot(data = eigen_df, ggplot2::aes(x = X, y = Y, label = Sample)) +
+  ggplot2::geom_text() +
+  ggplot2::xlab(paste("PC1 - ", eigen_var_prc[1], "%", sep = "")) +
+  ggplot2::ylab(paste("PC2 - ", eigen_var_prc[2], "%", sep = "")) +
+  ggplot2::theme_bw() +
+  ggplot2::ggtitle("eigen on cov(t(data.matrix))")
