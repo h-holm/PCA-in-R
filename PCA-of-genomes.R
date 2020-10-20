@@ -66,7 +66,7 @@ ggplot2::ggplot(data = pca_df, ggplot2::aes(x = X, y = Y, label = Sample)) +
   ggplot2::xlab(paste("PC1 - ", pca_var_prc[1], "%", sep = "")) +
   ggplot2::ylab(paste("PC2 - ", pca_var_prc[2], "%", sep = "")) +
   ggplot2::theme_bw() + # Make background white.
-  ggplot2::ggtitle("My PCA")
+  ggplot2::ggtitle("PCA plot")
 
 # Check loading scores to determine which genes have the largest effect on where samples are plotted.
 # Focus on PC1 since it has the by far highest variation.
