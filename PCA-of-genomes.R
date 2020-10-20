@@ -38,4 +38,17 @@ data.matrix <- t(data.matrix)
 dim(data.matrix)
 
 # Now we can test run PCA on our data.
-pca <- prcomp(t(data.matrix), scale=TRUE)
+pca <- prcomp(data.matrix, scale=TRUE)
+
+# Test plot using the two first principal components (out of 10 total).
+# The 1st account for the most variation, 2nd PC for second most etc.
+plot(pca$x[,1], pca$x[,2])
+
+# From the plot we could easily identify two clusters, each on opposite sides of the 1st PC's axis (x-axis).
+# print the variation of PC 1:
+pca.var <- (pca$sdev)^2
+
+# Calculate percentage of variation for current PC.
+pca.var.per <- round(pca.var/sum(pca.var)*100, 1)
+
+
