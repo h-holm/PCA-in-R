@@ -51,4 +51,13 @@ pca.var <- (pca$sdev)^2
 # Calculate percentage of variation for current PC.
 pca.var.per <- round(pca.var/sum(pca.var)*100, 1)
 
+# From the plot, we saw that PC1 accounts for almost all variation in the data:
+barplot(pca.var.per, main="Scree Plot", xlab="Principal Component", ylab="Percent Variation")
+
+# If we want to investigate X/Y-coordinates for PCs 1 and 2, put them in dataframe.
+pca.data <- data.frame(Sample=rownames(pca$x),
+                       X=pca$x[,1],
+                       Y=pca$x[,2])
+pca.data
+
 
