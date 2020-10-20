@@ -32,17 +32,21 @@ for (i in 1:100) {
 }
 
 # Samples are columns, genes are rows. Transpose to make data compatible with prcomp().
-data_matrix <- t(data_matrix)
+# data_matrix <- t(data_matrix)
 
 # Compare PCA results with results from using eigen()
 # eigen() returns vectors - eigenvectors (vectors with loading scores in this case)
 #                           pcs = sum(loading scores * values for sample)
 #                 values  - eigenvalues
-cov_matrix <- cov(scale(data_matrix, center = TRUE))
+cov_matrix <- cov(scale(t(data_matrix), center = TRUE))
 dim(cov_matrix)
 
 # We saw that the covariance matrix is symmetric. Hence, we can tell eigen()
 # to work only on the lower triangle by specifying symmetric = TRUE.
-eigen_res <- eigen(cov_matrix, symmetric = TRUE)
+# eigen_res <- eigen(cov_matrix, symmetric = TRUE)
+eigen.pcs <- t(t(eigen_res$vectors) %*% t(scale(t(data_matrix), center=TRUE)))
 dim(eigen_res$vectors)
 head(eigen_res$vectors[, 1:2])
+
+eigen_PCs <- eigen_res$vectors %*% scale(data_matrix, center=TRUE)
+eigen_PCs[, 1:2]
